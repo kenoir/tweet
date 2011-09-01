@@ -82,6 +82,12 @@
       return Date.parse(date_str.replace(/^([a-z]{3})( [a-z]{3} \d\d?)(.*)( \d{4})$/i, '$1,$2$4$3'));
     }
 
+		function html_entity_decode(str) {
+		  var ta=document.createElement("textarea");
+		  ta.innerHTML=str.replace(/</g,"&lt;").replace(/>/g,"&gt;");
+		  return ta.value;
+		}
+
     function relative_time(date) {
       var relative_to = (arguments.length > 1) ? arguments[1] : new Date();
       var delta = parseInt((relative_to.getTime() - date) / 1000, 10);
@@ -142,7 +148,7 @@
     function extract_template_data(item){
       var o = {};
       o.item = item;
-      o.source = item.source;
+      o.source = html_entity_decode(item.source); // item.source is supplied with URL entities
       o.screen_name = item.from_user || item.user.screen_name;
       o.avatar_size = s.avatar_size;
       o.avatar_url = maybe_https(item.profile_image_url || item.user.profile_image_url);
